@@ -10,7 +10,7 @@
 - Docker engine 20.10.21以降
 - [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide) の要件 
 
-## How does it work?
+## どうやって動かすか
 
 - [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) をセットアップ 
 - Dockerfileを記述
