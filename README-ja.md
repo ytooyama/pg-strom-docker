@@ -41,7 +41,7 @@ EXPOSE 5432
 
 - コンテナを起動
 
-Use the `--shm-size` option to set the appropriate shared memory to the container.
+`--shm-size` オプションを使用して、適切な共有メモリをコンテナーに設定します。
 
 ```
 # docker container run --gpus all --privileged --shm-size=8gb --memory=8gb --cpus=1.5 -p 5432:5432 -v ~/pg13data:/var/lib/pgsql/13/data -d --name=cont1 mypg13-ubi8:latest /sbin/init
