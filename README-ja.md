@@ -2,7 +2,7 @@
 
 # これは何？
 
-"PG-Strom"をコンテナの中で実行する試みです。
+"[PG-Strom](https://github.com/heterodb/pg-strom)"をコンテナの中で実行する試みです。
 
 ## ソフトウェア要件
 

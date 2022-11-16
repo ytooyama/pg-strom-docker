@@ -2,7 +2,7 @@
 
 # What's This ?
 
-Trying to run "PG-Strom" in a container!
+Trying to run "[PG-Strom](https://github.com/heterodb/pg-strom)" in a container!
 
 ## Software Requirements
 
