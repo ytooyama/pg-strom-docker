@@ -1,14 +1,16 @@
 FROM docker.io/nvidia/cuda:11.8.0-devel-ubi8 as base
 WORKDIR /root
 
-RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-  dnf install -y postgresql15-devel postgresql15-server && \
-  dnf install -y redhat-rpm-config rpm-build git
+RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+# If Using Podman to create container images in RHEL, Please Remove the Comments.
+# RUN dnf -y module disable postgresql
+RUN dnf install -y postgresql15-devel postgresql15-server && \
+    dnf install -y redhat-rpm-config rpm-build git
 
 RUN git clone https://github.com/ytooyama/pg-strom && cd /root/pg-strom/src && \
   export PATH=/usr/pgsql-15/bin:$PATH && \
   mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} && make rpm
-
 
 FROM docker.io/nvidia/cuda:11.8.0-devel-ubi8
 WORKDIR /root
