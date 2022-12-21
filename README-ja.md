@@ -1,6 +1,6 @@
 # pg-strom-docker
 
-# これは何？
+## これは何？
 
 "[PG-Strom](https://github.com/heterodb/pg-strom)"をコンテナの中で実行する試みです。
 
@@ -8,11 +8,11 @@
 
 - ホストOS: Red Hat Enterprise Linux 8.6以降
 - Docker engine 20.10.21以降
-- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide) の要件 
+- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide) の要件
 
 ## どうやって動かすか
 
-- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) をセットアップ 
+- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) をセットアップ
 - Dockerfileを記述
 
 例えば...
@@ -108,7 +108,6 @@ Nov 08 08:44:43 34b913768843 systemd[1]: Started PostgreSQL 13 database server.
 ```
 
 - 試してみましょう
-
 
 ```
 [root@7510416bd1ee /]# su - postgres
