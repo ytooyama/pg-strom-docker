@@ -23,6 +23,10 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
     rpm -i epel-release-latest-8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm
 
+#If you want to use the full version of PG-Strom, Please Remove the Comments.
+#COPY heterodb.license /etc/heterodb.license
+#RUN dnf install -y heterodb-extra
+
 RUN dnf -y module disable postgresql && \
     dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
     dnf install -y ./pg_strom-PG15-3.4-devel.el8.x86_64.rpm
