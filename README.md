@@ -30,6 +30,11 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
 
 RUN dnf install -y postgresql13-devel postgresql13-server postgresql-alternatives pg_strom-PG13
 
+ENV PATH /usr/pgsql-13/bin:$PATH
+ENV PGDATA /var/lib/pgsql/13/data
+RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
+VOLUME /var/lib/pgsql/13/data
+
 EXPOSE 5432
 ```
 
@@ -44,8 +49,7 @@ EXPOSE 5432
 Use the `--shm-size` option to set the appropriate shared memory to the container.
 
 ```
-# docker container run --gpus all --privileged --shm-size=8gb --memory=8gb --cpus=1.5 -p 5432:5432 -v ~/pg13data:/var/lib/pgsql/13/data -d --name=cont1 mypg13-ubi8:latest /sbin/init
-
+# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-ubi8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 
@@ -53,7 +57,7 @@ Use the `--shm-size` option to set the appropriate shared memory to the containe
 
 ```
 # su - postgres
-$ initdb -D /var/lib/pgsql/13/data
+$ /usr/pgsql-13/bin/initdb -D /var/lib/pgsql/13/data
 ```
 
 - Change the Params
@@ -72,39 +76,14 @@ work_mem = 1GB
 - Boot the PostgreSQL Server.
 
 ```
-[root@db91f908338a /]# systemctl start postgresql-13
-[root@db91f908338a /]# systemctl status postgresql-13
-● postgresql-13.service - PostgreSQL 13 database server
-   Loaded: loaded (/usr/lib/systemd/system/postgresql-13.service; disabled; vendor preset: disabled)
-  Drop-In: /etc/systemd/system/postgresql-13.service.d
-           └─pg_strom.conf
-   Active: active (running) since Tue 2022-11-08 08:44:43 UTC; 3s ago
-     Docs: https://www.postgresql.org/docs/13/static/
-  Process: 138 ExecStartPre=/usr/pgsql-13/bin/postgresql-13-check-db-dir ${PGDATA} (code=exited, status=0/SUCCESS)
- Main PID: 143 (postmaster)
-    Tasks: 14 (limit: 100585)
-   Memory: 291.5M
-   CGroup: /docker/34b9137688438bee441586c0d5e3ac3d2dfa9841fba60d9049a479dabfd6266b/system.slice/postgresql-13.service
-           ├─143 /usr/pgsql-13/bin/postmaster -D /var/lib/pgsql/13/data/
-           ├─146 postgres: logger 
-           ├─148 postgres: PG-Strom Program Builder-1 
-           ├─149 postgres: PG-Strom Program Builder-0 
-           ├─150 postgres: GPU0 memory keeper 
-           ├─151 postgres: checkpointer 
-           ├─152 postgres: background writer 
-           ├─153 postgres: walwriter 
-           ├─154 postgres: autovacuum launcher 
-           ├─155 postgres: stats collector 
-           └─156 postgres: logical replication launcher 
-
-Nov 08 08:44:42 34b913768843 systemd[1]: Starting PostgreSQL 13 database server...
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.040 UTC [143] LOG:  NVRTC 11.8 is successfully loaded.
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.040 UTC [143] LOG:  HeteroDB Extra module is not available
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.040 UTC [143] LOG:  PG-Strom version 3.3 built for PostgreSQL 13 (git: v3.3-2)
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.292 UTC [143] LOG:  PG-Strom: GPU0 NVIDIA GeForce GTX 1050 Ti (6 SMs; 1417MHz, L2 1024kB), RAM 4040MB (128bits>
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.365 UTC [143] LOG:  redirecting log output to logging collector process
-Nov 08 08:44:43 34b913768843 postmaster[143]: 2022-11-08 08:44:43.365 UTC [143] HINT:  Future log output will appear in directory "log".
-Nov 08 08:44:43 34b913768843 systemd[1]: Started PostgreSQL 13 database server.
+$ /usr/pgsql-13/bin/pg_ctl -D /var/lib/pgsql/13/data -l logfile start
+$ cat /var/lib/pgsql/logfile 
+2022-12-22 05:12:27.351 UTC [135] LOG:  NVRTC 11.8 is successfully loaded, but CUDA driver expects 12.0. Check /etc/ld.so.conf or LD_LIBRARY_PATH configuration.
+2022-12-22 05:12:27.352 UTC [135] LOG:  HeteroDB Extra module is not available
+2022-12-22 05:12:27.352 UTC [135] LOG:  PG-Strom version 3.4 built for PostgreSQL 13 (git: HEAD)
+2022-12-22 05:12:27.684 UTC [135] LOG:  PG-Strom: GPU0 NVIDIA GeForce GTX 1050 Ti (6 SMs; 1417MHz, L2 1024kB), RAM 4038MB (128bits, 3.34GHz), PCI-E Bar1 0MB, CC 6.1
+2022-12-22 05:12:27.817 UTC [135] LOG:  redirecting log output to logging collector process
+2022-12-22 05:12:27.817 UTC [135] HINT:  Future log output will appear in directory "log".
 ```
 
 - Let's Try One.
@@ -138,7 +117,7 @@ testdb2=# SELECT pg_size_pretty(pg_relation_size('t_test1'));
  1149 MB
 (1 row)
 
-testdb2=# VACUUM t_test;
+testdb2=# VACUUM t_test1;
 VACUUM
 
 testdb2=# EXPLAIN ANALYZE SELECT count(*)

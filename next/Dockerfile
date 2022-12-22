@@ -8,8 +8,9 @@ RUN dnf install -y postgresql15-devel postgresql15-server && \
     dnf install -y redhat-rpm-config rpm-build git
 
 RUN git clone https://github.com/heterodb/pg-strom && cd /root/pg-strom/src && \
-  export PATH=/usr/pgsql-15/bin:$PATH && \
-  mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} && make rpm
+    export PATH=/usr/pgsql-15/bin:$PATH && \
+    mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} && make rpm
+
 
 FROM docker.io/nvidia/cuda:11.8.0-devel-rockylinux8
 WORKDIR /root
@@ -27,8 +28,13 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
 #COPY heterodb.license /etc/heterodb.license
 #RUN dnf install -y heterodb-extra
 
-RUN dnf -y module disable postgresql && \
-    dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
+ENV PATH /usr/pgsql-15/bin:$PATH
+ENV PGDATA /var/lib/pgsql/15/data
+RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
+VOLUME /var/lib/pgsql/15/data
+
+RUN dnf -y module disable postgresql
+RUN dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
     dnf install -y ./pg_strom-PG15-3.4-devel.el8.x86_64.rpm
 
 EXPOSE 5432
