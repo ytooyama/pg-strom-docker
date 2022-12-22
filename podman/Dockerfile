@@ -17,4 +17,8 @@ ENV PGDATA /var/lib/pgsql/13/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
 VOLUME /var/lib/pgsql/13/data
 
+#If you want to use the full version of PG-Strom, Please Remove the Comments.
+#COPY heterodb.license /etc/heterodb.license
+#RUN dnf install -y heterodb-extra
+
 EXPOSE 5432
