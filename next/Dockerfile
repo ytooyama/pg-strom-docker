@@ -28,13 +28,13 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
 #COPY heterodb.license /etc/heterodb.license
 #RUN dnf install -y heterodb-extra
 
+RUN dnf -y module disable postgresql
+RUN dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
+    dnf install -y ./pg_strom-PG15-3.4-devel.el8.x86_64.rpm
+
 ENV PATH /usr/pgsql-15/bin:$PATH
 ENV PGDATA /var/lib/pgsql/15/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
 VOLUME /var/lib/pgsql/15/data
-
-RUN dnf -y module disable postgresql
-RUN dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
-    dnf install -y ./pg_strom-PG15-3.4-devel.el8.x86_64.rpm
 
 EXPOSE 5432
