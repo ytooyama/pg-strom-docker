@@ -1,4 +1,4 @@
-# pg-strom-docker
+# PG-Strom Containers
 
 ## What's This ?
 
