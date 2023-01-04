@@ -27,7 +27,7 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 #COPY heterodb.license /etc/heterodb.license
 #RUN dnf install -y heterodb-extra
-#RUN dnf install -y postgis32_15
+#RUN dnf --enablerepo=powertools install postgis32_15
 
 RUN dnf -y module disable postgresql
 RUN dnf install -y postgresql15-devel postgresql15-server postgresql-alternatives && \
