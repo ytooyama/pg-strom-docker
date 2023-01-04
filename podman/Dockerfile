@@ -20,5 +20,6 @@ VOLUME /var/lib/pgsql/13/data
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 #COPY heterodb.license /etc/heterodb.license
 #RUN dnf install -y heterodb-extra
+#RUN dnf install -y postgis32_13
 
 EXPOSE 5432
