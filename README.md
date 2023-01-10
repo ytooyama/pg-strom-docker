@@ -47,7 +47,7 @@ EXPOSE 5432
 - Make the Container Image.
 
 ```
-# docker image build --compress -t mypg13-ubi8:latest -f Dockerfile .
+# docker image build --compress -t mypg13-rocky8:latest -f Dockerfile .
 ```
 
 - Boot the Container
@@ -55,7 +55,7 @@ EXPOSE 5432
 Use the `--shm-size` option to set the appropriate shared memory to the container.
 
 ```
-# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-ubi8:latest
+# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-rocky8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 

@@ -47,7 +47,7 @@ EXPOSE 5432
 - コンテナイメージを作成
 
 ```
-# docker image build --compress -t mypg13-ubi8:latest -f Dockerfile .
+# docker image build --compress -t mypg13-rocky8:latest -f Dockerfile .
 ```
 
 - コンテナを起動
@@ -55,7 +55,7 @@ EXPOSE 5432
 `--shm-size` オプションを使用して、適切な共有メモリをコンテナーに設定します。
 
 ```
-# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-ubi8:latest
+# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-rocky8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 
