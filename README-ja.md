@@ -29,17 +29,17 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm
 
 RUN dnf -y module disable postgresql
-RUN dnf install -y postgresql13-devel postgresql13-server postgresql-alternatives pg_strom-PG13
+RUN dnf install --enablerepo=powertools -y postgresql14-devel postgresql14-server postgresql-alternatives pg_strom-PG14
 
-ENV PATH /usr/pgsql-13/bin:$PATH
-ENV PGDATA /var/lib/pgsql/13/data
+ENV PATH /usr/pgsql-14/bin:$PATH
+ENV PGDATA /var/lib/pgsql/14/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/pgsql/13/data
+VOLUME /var/lib/pgsql/14/data
 
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 # COPY heterodb.license /etc/heterodb.license
 # RUN dnf install -y heterodb-extra
-# RUN dnf --enablerepo=powertools install -y postgis32_13
+# RUN dnf --enablerepo=powertools install -y postgis32_14
 
 EXPOSE 5432
 ```
@@ -47,7 +47,7 @@ EXPOSE 5432
 - コンテナイメージを作成
 
 ```
-# docker image build --compress -t mypg13-rocky8:latest -f Dockerfile .
+# docker image build --compress -t mypg14-rocky8:latest -f Dockerfile .
 ```
 
 - コンテナを起動
@@ -55,7 +55,7 @@ EXPOSE 5432
 `--shm-size` オプションを使用して、適切な共有メモリをコンテナーに設定します。
 
 ```
-# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg13-rocky8:latest
+# docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg14-rocky8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 
@@ -63,7 +63,7 @@ EXPOSE 5432
 
 ```
 # su - postgres
-$ /usr/pgsql-13/bin/initdb -D /var/lib/pgsql/13/data
+$ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 ```
 
 - パラメータの変更
@@ -71,7 +71,7 @@ $ /usr/pgsql-13/bin/initdb -D /var/lib/pgsql/13/data
 例えば...
 
 ```
-$ vi /var/lib/pgsql/13/data/postgresql.conf
+$ vi /var/lib/pgsql/14/data/postgresql.conf
 ...
 shared_preload_libraries = '$libdir/pg_strom'
 max_worker_processes = 100
@@ -82,11 +82,11 @@ work_mem = 1GB
 - PostgreSQL Serverを起動
 
 ```
-$ /usr/pgsql-13/bin/pg_ctl -D /var/lib/pgsql/13/data -l logfile start
+$ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile start
 $ cat /var/lib/pgsql/logfile 
 2022-12-22 05:12:27.351 UTC [135] LOG:  NVRTC 11.8 is successfully loaded, but CUDA driver expects 12.0. Check /etc/ld.so.conf or LD_LIBRARY_PATH configuration.
 2022-12-22 05:12:27.352 UTC [135] LOG:  HeteroDB Extra module is not available
-2022-12-22 05:12:27.352 UTC [135] LOG:  PG-Strom version 3.4 built for PostgreSQL 13 (git: HEAD)
+2022-12-22 05:12:27.352 UTC [135] LOG:  PG-Strom version 3.4 built for PostgreSQL 14 (git: HEAD)
 2022-12-22 05:12:27.684 UTC [135] LOG:  PG-Strom: GPU0 NVIDIA GeForce GTX 1050 Ti (6 SMs; 1417MHz, L2 1024kB), RAM 4038MB (128bits, 3.34GHz), PCI-E Bar1 0MB, CC 6.1
 2022-12-22 05:12:27.817 UTC [135] LOG:  redirecting log output to logging collector process
 2022-12-22 05:12:27.817 UTC [135] HINT:  Future log output will appear in directory "log".
@@ -98,7 +98,7 @@ $ cat /var/lib/pgsql/logfile
 [root@7510416bd1ee /]# su - postgres
 Last login: Wed Nov  9 02:52:33 UTC 2022 on pts/0
 [postgres@7510416bd1ee ~]$ psql -U postgres -d postgres
-psql (13.8)
+psql (14.8)
 Type "help" for help.
 
 postgres=# CREATE DATABASE testdb2;

@@ -9,16 +9,16 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm
 
 RUN dnf -y module disable postgresql
-RUN dnf install -y postgresql13-devel postgresql13-server postgresql-alternatives pg_strom-PG13
+RUN dnf install --enablerepo=powertools -y postgresql14-devel postgresql14-server postgresql-alternatives pg_strom-PG14
 
-ENV PATH /usr/pgsql-13/bin:$PATH
-ENV PGDATA /var/lib/pgsql/13/data
+ENV PATH /usr/pgsql-14/bin:$PATH
+ENV PGDATA /var/lib/pgsql/14/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/pgsql/13/data
+VOLUME /var/lib/pgsql/14/data
 
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 # COPY heterodb.license /etc/heterodb.license
 # RUN dnf install -y heterodb-extra
-# RUN dnf --enablerepo=powertools install -y postgis32_13
+# RUN dnf --enablerepo=powertools install -y postgis32_14
 
 EXPOSE 5432
