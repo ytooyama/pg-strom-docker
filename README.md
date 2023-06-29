@@ -13,7 +13,7 @@ Trying to run "[PG-Strom](https://github.com/heterodb/pg-strom)" in a container!
 ## How does it work?
 
 - 1st, SETUP the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) . 
-- Write the Dockerfiles.
+- Write the Dockerfile.
 
 For Examples...
 
