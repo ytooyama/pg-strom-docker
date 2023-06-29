@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    tty: true
+    shm_size: 4gb
+    image: mypg14-rocky8:latest
+    volumes:
+      - db-data:/var/lib/pgsql/14/data
+    ports:
+      - 5432:5432
+    deploy:
+      resources:
+        limits:
+          memory: 4096M
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+volumes:
+  db-data:
