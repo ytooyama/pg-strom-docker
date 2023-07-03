@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pgstrom-test
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: pgstrom-pod
+      image: "localhost:32000/mypg14-rocky8:latest"
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+      tty: true
+      resources:
+        limits:
+          cpu: 200m
+          memory: 4096Mi
+          nvidia.com/gpu: 1
+  volumes:
+    - name: dshm
+      emptyDir:
+         medium: Memory
