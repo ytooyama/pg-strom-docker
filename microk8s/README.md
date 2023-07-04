@@ -38,7 +38,7 @@ EXPOSE 5432
 Build the image:
 
 ```shell
-sudo docker image build --compress -t mypg14-rocky8:latest -f Dockerfile .
+sudo docker image build --compress -t mypg14-rocky8:test1 -f Dockerfile .
 ```
 
 - [Deploy Docker](https://docs.docker.com/engine/install/ubuntu/) and [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) on Host Machine.
@@ -61,8 +61,8 @@ sudo microk8s enable gpu registry hostpath-storage
 - Register the created PG-Storm container image in the Local registry.
 
 ```shell
-docker tag mypg14-rocky8:latest localhost:32000/mypg14-rocky8:latest 
-docker push localhost:32000/mypg14-rocky8:latest 
+docker tag mypg14-rocky8:test1 localhost:32000/mypg14-rocky8:test1 
+docker push localhost:32000/mypg14-rocky8:test1 
 ```
 
 - Create the Pod.
