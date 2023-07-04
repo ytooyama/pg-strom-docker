@@ -17,8 +17,8 @@
 
 例えば...
 
-```
-FROM docker.io/nvidia/cuda:11.8.0-devel-rockylinux8
+```dockerfile
+FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8
 
 RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-1.el8.noarch.rpm && \
     curl -LO https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
@@ -46,7 +46,7 @@ EXPOSE 5432
 
 - コンテナイメージを作成
 
-```
+```bash
 # docker image build --compress -t mypg14-rocky8:latest -f Dockerfile .
 ```
 
@@ -54,14 +54,14 @@ EXPOSE 5432
 
 `--shm-size` オプションを使用して、適切な共有メモリをコンテナーに設定します。
 
-```
+```bash
 # docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg14-rocky8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 
 - initdbコマンドをコンテナで実行
 
-```
+```bash
 # su - postgres
 $ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 ```
@@ -70,7 +70,7 @@ $ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 
 例えば...
 
-```
+```bash
 $ vi /var/lib/pgsql/14/data/postgresql.conf
 ...
 shared_preload_libraries = '$libdir/pg_strom'
@@ -81,7 +81,7 @@ work_mem = 1GB
 
 - PostgreSQL Serverを起動
 
-```
+```bash
 $ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile start
 $ cat /var/lib/pgsql/logfile 
 2022-12-22 05:12:27.351 UTC [135] LOG:  NVRTC 11.8 is successfully loaded, but CUDA driver expects 12.0. Check /etc/ld.so.conf or LD_LIBRARY_PATH configuration.
@@ -94,7 +94,7 @@ $ cat /var/lib/pgsql/logfile
 
 - 試してみましょう
 
-```
+```bash
 [root@7510416bd1ee /]# su - postgres
 Last login: Wed Nov  9 02:52:33 UTC 2022 on pts/0
 [postgres@7510416bd1ee ~]$ psql -U postgres -d postgres

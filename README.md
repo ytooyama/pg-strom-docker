@@ -12,13 +12,13 @@ Trying to run "[PG-Strom](https://github.com/heterodb/pg-strom)" in a container!
 
 ## How does it work?
 
-- 1st, SETUP the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) . 
+- 1st, SETUP the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/overview.html) .
 - Write the Dockerfile.
 
 For Examples...
 
-```
-FROM docker.io/nvidia/cuda:11.8.0-devel-rockylinux8
+```dockerfile
+FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8
 
 RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-1.el8.noarch.rpm && \
     curl -LO https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
@@ -46,7 +46,7 @@ EXPOSE 5432
 
 - Make the Container Image.
 
-```
+```bash
 # docker image build --compress -t mypg14-rocky8:latest -f Dockerfile .
 ```
 
@@ -54,14 +54,14 @@ EXPOSE 5432
 
 Use the `--shm-size` option to set the appropriate shared memory to the container.
 
-```
+```bash
 # docker container run --gpus all --shm-size=8gb --memory=8gb -p 5432:5432 -itd --name=cont1 mypg14-rocky8:latest
 # docker container exec -it cont1 /bin/bash
 ```
 
 - Run initdb command in a container
 
-```
+```bash
 # su - postgres
 $ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 ```
@@ -70,7 +70,7 @@ $ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 
 For Examples...
 
-```
+```bash
 $ vi /var/lib/pgsql/14/data/postgresql.conf
 ...
 shared_preload_libraries = '$libdir/pg_strom'
@@ -81,7 +81,7 @@ work_mem = 1GB
 
 - Boot the PostgreSQL Server.
 
-```
+```bash
 $ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile start
 $ cat /var/lib/pgsql/logfile 
 2022-12-22 05:12:27.351 UTC [135] LOG:  NVRTC 11.8 is successfully loaded, but CUDA driver expects 12.0. Check /etc/ld.so.conf or LD_LIBRARY_PATH configuration.
@@ -94,7 +94,7 @@ $ cat /var/lib/pgsql/logfile
 
 - Let's Try One.
 
-```
+```bash
 [root@7510416bd1ee /]# su - postgres
 Last login: Wed Nov  9 02:52:33 UTC 2022 on pts/0
 [postgres@7510416bd1ee ~]$ psql -U postgres -d postgres

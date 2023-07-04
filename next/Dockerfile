@@ -1,4 +1,4 @@
-FROM docker.io/nvidia/cuda:11.8.0-devel-rockylinux8 as base
+FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8 as base
 WORKDIR /root
 
 RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
@@ -12,7 +12,7 @@ RUN git clone https://github.com/heterodb/pg-strom && cd /root/pg-strom/src && \
     mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} && make rpm
 
 
-FROM docker.io/nvidia/cuda:11.8.0-devel-rockylinux8
+FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8
 WORKDIR /root
 COPY --from=base /root/rpmbuild/RPMS/x86_64/pg_strom-PG15-3.4-devel*.rpm .
 
