@@ -50,10 +50,10 @@ sudo snap install microk8s --classic --channel=1.26/stable
 sudo microk8s.start
 ```
 
-- Add [gpu](https://microk8s.io/docs/addon-gpu) and [registry](https://microk8s.io/docs/registry-built-in) add-ons.
+- Add [gpu](https://microk8s.io/docs/addon-gpu) and [registry](https://microk8s.io/docs/registry-built-in) and [hostpath-storage](https://microk8s.io/docs/addon-hostpath-storage) add-ons.
 
 ```shell
-sudo microk8s enable gpu registry
+sudo microk8s enable gpu registry hostpath-storage
 ```
 
 ## Setup the Container Environments
@@ -68,12 +68,16 @@ docker push localhost:32000/mypg14-rocky8:latest
 - Create the Pod.
 
 ```shell
-$ kubectl apply -f pgstrom-test.yaml 
+$ kubectl apply -f pgstrom-pod-manifest.yaml
+persistentvolumeclaim/test-pvc created
 pod/pgstrom-test created
 
-$ kubectl get -f pgstrom-test.yaml 
-NAME           READY   STATUS    RESTARTS   AGE
-pgstrom-test   1/1     Running   0          4s
+$ kubectl get -f pgstrom-pod-manifest.yaml
+NAME                             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS        AGE
+persistentvolumeclaim/test-pvc   Bound    pvc-e614a758-5766-4a00-b0b4-524e18f0e463   3Gi        RWO            microk8s-hostpath   28s
+
+NAME               READY   STATUS    RESTARTS   AGE
+pod/pgstrom-test   1/1     Running   0          28s
 ```
 
 ## Setup the PG-Strom

@@ -1,3 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-pvc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 3Gi } }
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -5,12 +14,14 @@ metadata:
 spec:
   restartPolicy: OnFailure
   containers:
-    - name: pgstrom-pod
-      image: "localhost:32000/mypg14-rocky8:latest"
+    - name: cuda12-test
+      image: "localhost:32000/mypg14-rocky8:test1"
       imagePullPolicy: IfNotPresent
       volumeMounts:
-        - mountPath: /dev/shm
-          name: dshm
+        - name: dshm
+          mountPath: /dev/shm
+        - name: pvc
+          mountPath: /var/lib/pgsql/14/data
       tty: true
       resources:
         limits:
@@ -21,3 +32,6 @@ spec:
     - name: dshm
       emptyDir:
          medium: Memory
+    - name: pvc
+      persistentVolumeClaim:
+        claimName: test-pvc
