@@ -14,7 +14,7 @@ metadata:
 spec:
   restartPolicy: OnFailure
   containers:
-    - name: cuda12-test
+    - name: pgstrom-container
       image: "localhost:32000/mypg14-rocky8:test1"
       imagePullPolicy: IfNotPresent
       volumeMounts:
