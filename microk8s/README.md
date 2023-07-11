@@ -87,10 +87,17 @@ pod/pgstrom-test   1/1     Running   0          28s
 ```shell
 $ kubectl exec -it pgstrom-test -- bash
 
+//fix the permittion
+# chown postgres.postgres /var/lib/pgsql/14/data
+
+//change user
 $ su - postgres
 
+//initdb
 $ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
 ...
+
+//Postgres confings
 $ vi /var/lib/pgsql/14/data/postgresql.conf
 ...
 $ Add settings for extensions here
@@ -99,6 +106,7 @@ max_worker_processes = 100
 shared_buffers = 4GB
 work_mem = 1GB
 
+//start the postgres
 $ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile start
 ...
 waiting for server to start..... done
