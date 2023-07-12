@@ -9,7 +9,7 @@ RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-
     rpm -i pgdg-redhat-repo-latest.noarch.rpm
 
 RUN dnf -y module disable postgresql && \
-    dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives && \    
+    dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives postgis32_15 && \    
     dnf clean all && dnf clean metadata
     
 RUN dnf groupinstall -y 'Development Tools'
