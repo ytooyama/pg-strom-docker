@@ -9,10 +9,10 @@ RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-
 
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 # COPY heterodb.license /etc/heterodb.license
-# RUN dnf install -y heterodb-extra && dnf --enablerepo=powertools install -y postgis32_14
+# RUN dnf install -y heterodb-extra
 
 RUN dnf -y module disable postgresql && \
-    dnf install --enablerepo=powertools -y postgresql14-devel postgresql14-server postgresql-alternatives pg_strom-PG14 && \
+    dnf install --enablerepo=powertools -y postgresql14-devel postgresql14-server postgresql-alternatives pg_strom-PG14 postgis32_14 && \
     dnf clean all && dnf clean metadata
 
 ENV PATH /usr/pgsql-14/bin:$PATH
