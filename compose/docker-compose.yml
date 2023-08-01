@@ -4,9 +4,9 @@ services:
   db:
     tty: true
     shm_size: 4gb
-    image: mypg14-rocky8:latest
+    image: mypg15-rocky8:latest
     volumes:
-      - db-data:/var/lib/pgsql/14/data
+      - db-data:/var/lib/pgsql/15/data
     ports:
       - 5432:5432
     deploy:

@@ -20,17 +20,16 @@ RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm
 
 RUN dnf -y module disable postgresql
-RUN dnf install --enablerepo=powertools -y postgresql14-devel postgresql14-server postgresql-alternatives pg_strom-PG14
+RUN dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives pg_strom-PG15 postgis32_15
 
-ENV PATH /usr/pgsql-14/bin:$PATH
-ENV PGDATA /var/lib/pgsql/14/data
+ENV PATH /usr/pgsql-15/bin:$PATH
+ENV PGDATA /var/lib/pgsql/15/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/pgsql/14/data
+VOLUME /var/lib/pgsql/15/data
 
 #If you want to use the full version of PG-Strom, Please Remove the Comments.
 # COPY heterodb.license /etc/heterodb.license
 # RUN dnf install -y heterodb-extra
-# RUN dnf --enablerepo=powertools install -y postgis32_14
 
 EXPOSE 5432
 ```
@@ -38,7 +37,7 @@ EXPOSE 5432
 Build the image:
 
 ```shell
-sudo docker image build --compress -t mypg14-rocky8:test1 -f Dockerfile .
+sudo docker image build --compress -t mypg15-rocky8:latest -f Dockerfile .
 ```
 
 - [Deploy Docker](https://docs.docker.com/engine/install/ubuntu/) and [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) on Host Machine.
@@ -61,8 +60,8 @@ sudo microk8s enable gpu registry hostpath-storage
 - Register the created PG-Storm container image in the Local registry.
 
 ```shell
-docker tag mypg14-rocky8:test1 localhost:32000/mypg14-rocky8:test1 
-docker push localhost:32000/mypg14-rocky8:test1 
+docker tag mypg15-rocky8:latest localhost:32000/mypg15-rocky8:latest
+docker push localhost:32000/mypg15-rocky8:latest
 ```
 
 - Create the Pod.
@@ -88,17 +87,17 @@ pod/pgstrom-test   1/1     Running   0          28s
 $ kubectl exec -it pgstrom-test -- bash
 
 //fix the permittion
-# chown postgres.postgres /var/lib/pgsql/14/data
+# chown postgres.postgres /var/lib/pgsql/15/data
 
 //change user
 $ su - postgres
 
 //initdb
-$ /usr/pgsql-14/bin/initdb -D /var/lib/pgsql/14/data
+$ /usr/pgsql-15/bin/initdb -D /var/lib/pgsql/15/data
 ...
 
 //Postgres confings
-$ vi /var/lib/pgsql/14/data/postgresql.conf
+$ vi /var/lib/pgsql/15/data/postgresql.conf
 ...
 $ Add settings for extensions here
 shared_preload_libraries = '$libdir/pg_strom'
@@ -107,21 +106,21 @@ shared_buffers = 4GB
 work_mem = 1GB
 
 //start the postgres
-$ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile start
+$ /usr/pgsql-15/bin/pg_ctl -D /var/lib/pgsql/15/data -l logfile start
 ...
 waiting for server to start..... done
 server started
 
-$ /usr/pgsql-14/bin/pg_ctl -D /var/lib/pgsql/14/data -l logfile status
+$ /usr/pgsql-15/bin/pg_ctl -D /var/lib/pgsql/15/data -l logfile status
 pg_ctl: server is running (PID: 149)
-/usr/pgsql-14/bin/postgres "-D" "/var/lib/pgsql/14/data"
+/usr/pgsql-15/bin/postgres "-D" "/var/lib/pgsql/15/data"
 ```
 
 ## Check the PG-Strom
 
 ```shell
 $ psql -U postgres
-psql (14.8)
+psql (15.3)
 Type "help" for help.
 
 postgres=# CREATE EXTENSION pg_strom;

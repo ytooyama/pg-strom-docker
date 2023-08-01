@@ -18,7 +18,7 @@ $ sudo docker compose up -d
  ✔ Container pgstrom-compose-db-1    Started                                                              0.3s 
 $ sudo docker compose ps 
 NAME                   IMAGE                  COMMAND                  SERVICE             CREATED             STATUS              PORTS
-pgstrom-compose-db-1   mypg14-rocky8:latest   "/opt/nvidia/nvidia_…"   db                  11 seconds ago      Up 10 seconds       0.0.0.0:5432->5432/tcp, :::5432->5432/tcp
+pgstrom-compose-db-1   mypg15-rocky8:latest   "/opt/nvidia/nvidia_…"   db                  11 seconds ago      Up 10 seconds       0.0.0.0:5432->5432/tcp, :::5432->5432/tcp
 ```
 
 - Once PostgreSQL & PG-Strom is configured in the same way as Docker, it can be used in containers.

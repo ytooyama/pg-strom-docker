@@ -15,13 +15,13 @@ spec:
   restartPolicy: OnFailure
   containers:
     - name: pgstrom-container
-      image: "localhost:32000/mypg14-rocky8:test1"
+      image: "localhost:32000/mypg15-rocky8:latest"
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - name: dshm
           mountPath: /dev/shm
         - name: pvc
-          mountPath: /var/lib/pgsql/14/data
+          mountPath: /var/lib/pgsql/15/data
       tty: true
       resources:
         limits:
