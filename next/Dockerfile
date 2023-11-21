@@ -1,4 +1,4 @@
-FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8
+FROM docker.io/nvidia/cuda:12.2.2-devel-rockylinux8
 WORKDIR /root
 
 RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-1.el8.noarch.rpm && \
