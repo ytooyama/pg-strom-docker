@@ -7,16 +7,15 @@ RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.3-
     rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
     rpm -i epel-release-latest-8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm && \
-    rm -rf heterodb-swdc-1.3-1.el8.noarch.rpm epel-release-latest-8.noarch.rpm pgdg-redhat-repo-latest.noarch.rpm
-
-RUN dnf -y module disable postgresql && \
-    dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives postgis32_15
+    dnf -y module disable postgresql && \
+    dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives postgis32_15 && \
+    dnf groupinstall -y 'Development Tools'
     
-RUN dnf groupinstall -y 'Development Tools' && dnf clean all && dnf clean metadata
-
 RUN git clone https://github.com/heterodb/pg-strom && cd /root/pg-strom/src && \
     make PG_CONFIG=/usr/pgsql-15/bin/pg_config && \
-    make install PG_CONFIG=/usr/pgsql-15/bin/pg_config
+    make install PG_CONFIG=/usr/pgsql-15/bin/pg_config && \
+    dnf clean all && dnf clean metadata && \
+    rm -rf heterodb-swdc-1.3-1.el8.noarch.rpm epel-release-latest-8.noarch.rpm pgdg-redhat-repo-latest.noarch.rpm
 
 ENV PATH /usr/pgsql-15/bin:$PATH
 ENV PGDATA /var/lib/pgsql/15/data
