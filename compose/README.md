@@ -1,5 +1,12 @@
 # Make the  PG-Strom environment with Docker Compose V2
 
+- Build the image.
+
+```shell
+cd pg-strom-docker/docker
+sudo docker image build --compress -t mypg15-rocky8:latest -f Dockerfile .
+```
+
 - Create the Project Directory and `docker-compose.yml`.
 
 ```shell

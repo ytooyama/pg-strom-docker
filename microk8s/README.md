@@ -6,37 +6,10 @@
 - [Install CUDA Driver](https://developer.nvidia.com/cuda-12-0-1-download-archive) on the Host Machine.
 - [Create a container image for PG-Storm](https://github.com/ytooyama/pg-strom-docker) .
 
-Create Dockerfile:
-
-```Dockerfile
-FROM docker.io/nvidia/cuda:12.0.1-devel-rockylinux8
-
-RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.2-1.el8.noarch.rpm && \
-    curl -LO https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
-    curl -LO https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-
-RUN rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
-    rpm -i epel-release-latest-8.noarch.rpm && \
-    rpm -i pgdg-redhat-repo-latest.noarch.rpm
-
-RUN dnf -y module disable postgresql
-RUN dnf install --enablerepo=powertools -y postgresql15-devel postgresql15-server postgresql-alternatives pg_strom-PG15 postgis32_15
-
-ENV PATH /usr/pgsql-15/bin:$PATH
-ENV PGDATA /var/lib/pgsql/15/data
-RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/pgsql/15/data
-
-#If you want to use the full version of PG-Strom, Please Remove the Comments.
-# COPY heterodb.license /etc/heterodb.license
-# RUN dnf install -y heterodb-extra
-
-EXPOSE 5432
-```
-
 Build the image:
 
 ```shell
+cd pg-strom-docker/docker
 sudo docker image build --compress -t mypg15-rocky8:latest -f Dockerfile .
 ```
 
