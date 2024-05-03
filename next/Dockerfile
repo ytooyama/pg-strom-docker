@@ -4,7 +4,7 @@ WORKDIR /root
 RUN curl -LO https://heterodb.github.io/swdc/yum/rhel8-noarch/heterodb-swdc-1.3-1.el8.noarch.rpm && \
     curl -LO https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -LO https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    rpm -i heterodb-swdc-1.2-1.el8.noarch.rpm && \
+    rpm -i heterodb-swdc-1.3-1.el8.noarch.rpm && \
     rpm -i epel-release-latest-8.noarch.rpm && \
     rpm -i pgdg-redhat-repo-latest.noarch.rpm && \
     dnf -y module disable postgresql && \
