@@ -6,7 +6,7 @@ services:
     shm_size: 4gb
     image: mypg15-rocky8:latest
     volumes:
-      - db-data:/var/lib/pgsql/15/data
+      - db-data:/var/lib/pgsql/16/data
     ports:
       - 5432:5432
     deploy:
