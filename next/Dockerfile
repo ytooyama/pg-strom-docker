@@ -21,6 +21,9 @@ RUN git clone https://github.com/heterodb/pg-strom && cd /root/pg-strom/src && \
     make PG_CONFIG=/usr/pgsql-16/bin/pg_config && \
     make install PG_CONFIG=/usr/pgsql-16/bin/pg_config
 
+# If you want to use the GPU-PostGIS, Please Remove the Comments.
+# RUN dnf install postgis34_16  
+
 ENV PATH /usr/pgsql-16/bin:$PATH
 ENV PGDATA /var/lib/pgsql/16/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"

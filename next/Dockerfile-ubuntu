@@ -1,0 +1,29 @@
+# Development ver
+
+FROM docker.io/nvidia/cuda:12.5.1-devel-ubuntu22.04
+WORKDIR /root
+
+#Install the PostgreSQL
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN apt-get update && apt-get install -y postgresql-common build-essential vim wget git gcc make clang-15 && /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && apt-get install -y postgresql-16 postgresql-server-dev-16 postgresql-client-16
+
+# If you want to use the full version of PG-Strom, Please Remove the Comments.
+# COPY heterodb.license /etc/heterodb.license
+# RUN wget https://heterodb.github.io/swdc/deb/heterodb-extra_5.4-1_amd64.deb && dpkg -i /root/heterodb-extra_5.4-1_amd64.deb
+
+# If you want to use the GPU-PostGIS, Please Remove the Comments.
+# RUN apt-get update && apt-get install -y postgresql-16-postgis-3 postgresql-16-postgis-3-scripts
+
+#Add Paths
+ENV PATH /usr/local/cuda/bin:$PATH
+ENV PGDATA /var/lib/postgresql/16/main
+RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
+VOLUME /var/lib/postgresql/16/main
+#Workaround
+RUN echo "PATH = '/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+" >> /etc/postgresql/16/main/environment
+
+#Install the PG-Strom
+RUN git clone https://github.com/heterodb/pg-strom && cd /root/pg-strom/src && \
+    make PG_CONFIG=/usr/bin/pg_config && \
+    make install PG_CONFIG=/usr/bin/pg_config
