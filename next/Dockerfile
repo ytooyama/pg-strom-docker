@@ -10,7 +10,7 @@ RUN rpm -i heterodb-swdc-1.3-1.el8.noarch.rpm && \
     rm -rf heterodb-swdc-1.3-1.el8.noarch.rpm epel-release-latest-8.noarch.rpm pgdg-redhat-repo-latest.noarch.rpm
 
 RUN dnf -y module disable postgresql && \
-    dnf install --enablerepo=powertools -y postgresql16-devel postgresql16-server && \
+    dnf install --enablerepo=powertools -y postgresql16-devel postgresql16-server clang && \
     dnf group install -y "Development Tools" && \
     # If you want to use the full version of PG-Strom, Please Remove the Comments.
     # COPY heterodb.license /etc/heterodb.license && \
